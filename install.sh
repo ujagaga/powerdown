@@ -39,7 +39,7 @@ fi
 
 # Install Flask
 echo "Installing Flask..."
-pip install flask netifaces
+pip install flask
 if [ $? -ne 0 ]; then
     echo "Error: Failed to install Flask."
     deactivate
