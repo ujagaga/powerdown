@@ -9,6 +9,18 @@ app = Flask(__name__)
 # Generate the timestamp at the time of starting the app
 timestamp = int(time.time())
 
+# Function to get the IP address of the WiFi adapter
+def get_ip_address(interface):
+    try:
+        # Use socket to get the IP address
+        import netifaces
+        if netifaces.AF_INET in netifaces.ifaddresses(interface):
+            ip_info = netifaces.ifaddresses(interface)[netifaces.AF_INET]
+            return ip_info[0]['addr'] if ip_info else "No IP assigned"
+        return "No IP assigned"
+    except Exception:
+        return "IP address not available"
+
 # Route to serve the SVG file
 @app.route("/power-button.svg")
 def serve_svg():
@@ -17,6 +29,8 @@ def serve_svg():
 # Home page route
 @app.route("/")
 def home():
+    # Get the current IP address of the WiFi adapter
+    ip_address = get_ip_address("wlp0s20f3")
     return render_template_string(f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -27,6 +41,7 @@ def home():
         <style>
             body {{
                 display: flex;
+                flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 height: 100vh;
@@ -40,12 +55,18 @@ def home():
                 width: 100px;
                 height: 100px;
             }}
+            .ip {{
+                margin-top: 20px;
+                font-size: 1.2em;
+                color: #333;
+            }}
         </style>
     </head>
     <body>
         <a href="/powerdown?timestamp={timestamp}">
             <img src="/power-button.svg" alt="Power Button">
         </a>
+        <div class="ip">Current IP Address: {ip_address}</div>
     </body>
     </html>
     """)

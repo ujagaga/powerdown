@@ -1,4 +1,4 @@
 #!/bin/sh
 
-source venv/bin/activate
+
 venv/bin/python powerdown.py

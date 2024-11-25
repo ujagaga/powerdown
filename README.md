@@ -4,7 +4,7 @@ Python Flask app to power down a linux computer.
 ## Usage
 1. Install Flask framework:
 
-    `pip3 install flask`
+    `pip3 install flask netifaces`
 
 2. Make app executable
 
